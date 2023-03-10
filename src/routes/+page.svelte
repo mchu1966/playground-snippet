@@ -29,7 +29,11 @@
 	$: if (passcode == '123') {
 		pass = true;
 	}
+
+	import Collapse from 'lib/collapse.svelte';
 </script>
+
+<Collapse />
 
 {#if pass}
 	<h1>Welcome to SvelteKit</h1>
@@ -55,7 +59,7 @@
 	{/if}
 
 	<br />
-	<a href="/home">go to /home</a>
+	<a data-sveltekit-preload-data="tap" href="/home">go to /home</a>
 {:else}
 	<input
 		type="text"
