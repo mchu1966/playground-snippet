@@ -30,7 +30,7 @@
 		pass = true;
 	}
 
-	import Collapse from 'lib/collapse.svelte';
+	import Collapse from 'components/collapse.svelte';
 </script>
 
 <Collapse />

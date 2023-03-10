@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Home from '../../lib/return-button.svelte';
+	import Home from 'components/return-button.svelte';
 </script>
 
 <Home current="/home" />

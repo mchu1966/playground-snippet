@@ -9,6 +9,7 @@ const config = {
   },
 
   plugins: [require("tw-elements/dist/plugin")],
+  darkMode: 'class',
 };
 
 module.exports = config;
