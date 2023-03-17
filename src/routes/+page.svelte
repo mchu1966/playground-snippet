@@ -1,70 +1,87 @@
 <script lang="ts">
-	let count: number = 0;
-	function handleClick(): void {
-		count += 1;
+	import { createEventDispatcher } from 'svelte';
+
+	let code: string = '';
+	let result: string = 'testestestset';
+	let height: number;
+	$: height = code.split(/\r\n|\r|\n/).length;
+
+	const dispatch = createEventDispatcher();
+	const submit = () => dispatch('submit');
+
+	async function handleSubmit() {
+		let formData = new FormData();
+		formData.append('version', '2');
+		formData.append('body', code);
+		formData.append('withVet', 'true');
+
+		const res = await fetch('https://go.dev/_/compile', {
+			method: 'POST',
+			body: formData
+		});
+
+		alert(res);
 	}
-
-	let name: string = 'Jacky';
-
-	$: if (count >= 10) {
-		alert('count is high');
-		count = 1;
-	}
-
-	let numbers: number[] = [1, 2, 3, 4];
-	function addNumber() {
-		numbers = [...numbers, numbers.push(numbers.length + 1)];
-	}
-
-	$: sum = numbers.reduce((t, n) => t + n, 0);
-
-	let user = { loggedIn: false };
-
-	function toggle() {
-		user.loggedIn = !user.loggedIn;
-	}
-
-	let passcode: string;
-	let pass: boolean = false;
-	$: if (passcode == '123') {
-		pass = true;
-	}
-
-	import Collapse from 'components/collapse.svelte';
 </script>
 
-<Collapse />
+<div>
+	<div class="flex flex-row w-full ">
+		<div class="block p-2.5 w-1/2 ">
+			<label for="large-input" class="block text-sm font-medium text-gray-900 dark:text-white"
+				>Code</label
+			>
+			<div class="flex flex-row">
+				<div class="w-[3%] py-1 text-sm">
+					<div>1</div>
+					<div>2</div>
+					<div>3</div>
+					<div>4</div>
+					<div>5</div>
+					<div>6</div>
+				</div>
 
-{#if pass}
-	<h1>Welcome to SvelteKit</h1>
-	<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-	<p class="text-teal-500">Tailwind is working</p>
-	<button on:click={handleClick}>
-		Clicked {count}
-		{count <= 1 ? 'time' : 'times'}
-	</button>
+				<textarea
+					id="message"
+					rows={height}
+					wrap="off"
+					class="resize-none leading-4 h-grow w-full p-2 text-sm text-gray-900 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+					placeholder="Type your code here..."
+					bind:value={code}
+				/>
+			</div>
+			<button
+				type="submit"
+				class="shadow-black rounded-lg border text-sm p-1"
+				on:click={handleSubmit}>Run</button
+			>
+			<button
+				type="submit"
+				class="shadow-black rounded-lg border text-sm p-1"
+				on:click={handleSubmit}>Format</button
+			>
+		</div>
+		<div class="block p-2.5 w-1/2">
+			<label for="large-input" class="block text-sm font-medium text-gray-900 dark:text-white"
+				>Result</label
+			>
+			<div class="flex flex-row">
+				<div class="w-[3%] py-1 text-sm">
+					<div>1</div>
+					<div>2</div>
+					<div>3</div>
+					<div>4</div>
+					<div>5</div>
+					<div>6</div>
+				</div>
 
-	<h1>Hello {name}!</h1>
-
-	<p>{numbers.join(' + ')} = {sum}</p>
-	<button on:click={addNumber}> add a number</button>
-
-	<br />
-	{#if user.loggedIn}
-		<button on:click={toggle}> Log out </button>
-	{/if}
-
-	{#if !user.loggedIn}
-		<button on:click={toggle}> Log in </button>
-	{/if}
-
-	<br />
-	<a data-sveltekit-preload-data="tap" href="/home">go to /home</a>
-{:else}
-	<input
-		type="text"
-		placeholder="input pass code"
-		class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-		bind:value={passcode}
-	/>
-{/if}
+				<textarea
+					disabled
+					id="result"
+					rows="4"
+					class="w-[97%] p-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					>{result}</textarea
+				>
+			</div>
+		</div>
+	</div>
+</div>

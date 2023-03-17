@@ -1,0 +1,8 @@
+.note-line {
+    background-attachment: local;
+    background-image:
+        linear-gradient(to right, white 0px, transparent 0px),
+        linear-gradient(to left, white 0px, transparent 0px),
+        repeating-linear-gradient(white, white 30px, black 30px, black 31px, white 31px);
+    line-height: 1rem;
+}
