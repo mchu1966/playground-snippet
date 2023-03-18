@@ -1,7 +1,11 @@
 package handler
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
+	"net/url"
+	"strings"
 
 	"github.com/uptrace/bunrouter"
 )
@@ -22,9 +26,57 @@ func init() {
 }
 
 func testHandler(w http.ResponseWriter, r bunrouter.Request) error {
-	return bunrouter.JSON(w, bunrouter.H{
-		"test": "Hello go handler.",
-	})
+	form := url.Values{}
+	form.Add("version", "2")
+	code := `
+// You can edit this code!/n
+// Click here and start typing./n
+package main/n
+/n
+import "fmt"/n
+/n
+func main() {/n
+	fmt.Println("Hello, 世界")/n
+}/n
+`
+	form.Add("body", code)
+	form.Add("withVet", "true")
+
+	url := "https://go.dev/_/compile?backend="
+	req, err := http.NewRequest("POST", url, strings.NewReader(form.Encode()))
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
+
+	req.Header.Add("accept", "*/*")
+	req.Header.Add("host", "go.dev")
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
+
+	defer res.Body.Close()
+	b, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
+
+	var m = make(map[string]interface{})
+	err = json.Unmarshal(b, &m)
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
+
+	return bunrouter.JSON(w, m)
 }
 
 func debugHandler(w http.ResponseWriter, req bunrouter.Request) error {
