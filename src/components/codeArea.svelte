@@ -9,6 +9,7 @@
 	$: height = code.split(/\r\n|\r|\n/).length;
 
 	async function handleRun(): Promise<void> {
+		await handleFormat();
 		const res = await fetch('/api/run', {
 			method: 'POST',
 			headers: {
@@ -49,7 +50,7 @@
 	<div class="block p-2.5 w-full md:w-1/2">
 		<label for="large-input" class="block text-sm font-medium text-gray-900">Code</label>
 		<div class="flex flex-row">
-			<div class="w-[5%] py-1 text-sm">
+			<div class="w-[5%] py-1 pr-1 text-sm">
 				{#each Array(height) as _, index}
 					<div class="text-right">{index + 1}</div>
 				{/each}
@@ -59,19 +60,14 @@
 				id="message"
 				rows={height}
 				wrap="off"
-				class="resize-none leading-5 h-grow w-full py-1 px-3 text-sm text-gray-900 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+				class="resize-none leading-5 h-grow w-full py-1 px-2 text-sm text-gray-900 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
 				placeholder="Type your code here..."
 				bind:value={code}
 			/>
 		</div>
 		<div class="p-2">
-			<button
-				type="submit"
-				class="shadow-black rounded-lg border text-sm p-1"
-				on:click={() => {
-					handleFormat;
-					handleRun;
-				}}>Run</button
+			<button type="submit" class="shadow-black rounded-lg border text-sm p-1" on:click={handleRun}
+				>Run</button
 			>
 			<button
 				type="submit"
@@ -94,7 +90,7 @@
 				id="output"
 				rows={resultHeight}
 				wrap="off"
-				class="resize-none leading-5 h-grow w-full py-1 px-3 text-sm text-gray-900 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+				class="resize-none leading-5 h-grow w-full py-1 px-2 text-sm text-gray-900 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
 				>{result}</textarea
 			>
 		</div>
