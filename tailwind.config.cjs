@@ -1,15 +1,16 @@
 const config = {
-  content: [
-    "./src/**/*.{html,js,svelte,ts}",
-    "./node_modules/tw-elements/dist/js/**/*.js"
-  ],
+	content: ['./src/**/*.{html,js,svelte,ts}'],
 
-  theme: {
-    extend: {}
-  },
-
-  plugins: [require("tw-elements/dist/plugin")],
-  darkMode: 'class',
+	theme: {
+		extend: {
+			lineHeight: {
+				'extra-loose': '2.5',
+				12: '3rem'
+			},
+			darkMode: 'class'
+		}
+	},
+	darkMode: 'class'
 };
 
 module.exports = config;

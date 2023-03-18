@@ -37,10 +37,22 @@ func main() {
 	function handleAddNew() {
 		mockSnippets = [...mockSnippets, ``];
 	}
+
+	let darkMode = false;
+	function handleSwitchDarkMode() {
+		darkMode = !darkMode;
+
+		darkMode
+			? document.documentElement.classList.add('dark')
+			: document.documentElement.classList.remove('dark');
+	}
 </script>
 
-<div class="px-2">
-	<button class="p-2 border shadow-md" on:click={handleAddNew}>Add new</button>
+<div class="px-2 dark:bg-gray-400">
+	<div class="p-2">
+		<button class="p-2 border shadow-md" on:click={handleSwitchDarkMode}>Switch</button>
+		<button class="p-2 border shadow-md" on:click={handleAddNew}>Add new</button>
+	</div>
 	<!-- https://eternaldev.com/blog/5-ways-to-perform-for-loop-in-svelte-each-block/ -->
 	{#each mockSnippets as snippet, index}
 		<CodeArea code={snippet} />
