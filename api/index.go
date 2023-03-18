@@ -14,10 +14,17 @@ func routers(g *bunrouter.Group) {
 	g.GET("/users/:id", debugHandler)
 	g.GET("/users/current", debugHandler)
 	g.GET("/users/*path", debugHandler)
+	g.GET("/test", testHandler)
 }
 
 func init() {
 	router.WithGroup("/api", routers)
+}
+
+func testHandler(w http.ResponseWriter, r bunrouter.Request) error {
+	return bunrouter.JSON(w, bunrouter.H{
+		"test": "Hello go handler.",
+	})
 }
 
 func debugHandler(w http.ResponseWriter, req bunrouter.Request) error {

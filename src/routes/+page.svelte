@@ -37,6 +37,16 @@ func main() {
 	function handleAddNew() {
 		mockSnippets = [...mockSnippets, ``];
 	}
+
+	async function testApi(): Promise<void> {
+		const res = await fetch('/api/test', {
+			method: 'GET'
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				console.log(data);
+			});
+	}
 </script>
 
 <div class="px-2">
@@ -45,4 +55,6 @@ func main() {
 	{#each mockSnippets as snippet, index}
 		<CodeArea code={snippet} />
 	{/each}
+
+	<button on:click={testApi}>Test</button>
 </div>
