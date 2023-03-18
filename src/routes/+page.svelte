@@ -48,7 +48,7 @@ func main() {
 	}
 </script>
 
-<div class="px-2 dark:bg-gray-400">
+<div class="px-2 dark:bg-gray-400 h-screen">
 	<div class="p-2">
 		<button class="p-2 border shadow-md" on:click={handleSwitchDarkMode}>Switch</button>
 		<button class="p-2 border shadow-md" on:click={handleAddNew}>Add new</button>

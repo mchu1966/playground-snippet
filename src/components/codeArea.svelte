@@ -65,8 +65,13 @@
 			/>
 		</div>
 		<div class="p-2">
-			<button type="submit" class="shadow-black rounded-lg border text-sm p-1" on:click={handleRun}
-				>Run</button
+			<button
+				type="submit"
+				class="shadow-black rounded-lg border text-sm p-1"
+				on:click={() => {
+					handleFormat;
+					handleRun;
+				}}>Run</button
 			>
 			<button
 				type="submit"
