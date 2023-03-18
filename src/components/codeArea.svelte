@@ -8,24 +8,16 @@
 	let resultHeight: number;
 	$: height = code.split(/\r\n|\r|\n/).length;
 
-	const dispatch = createEventDispatcher();
-	const submit = () => dispatch('submit');
-
 	async function handleRun(): Promise<void> {
-		let formData: FormData = new FormData();
-		formData.append('version', '2');
-		formData.append('body', code);
-		formData.append('withVet', 'true');
-
-		// call our own backend endpoint later.
-		const res = await fetch('https://go.dev/_/compile?backend=', {
+		const res = await fetch('/api/run', {
 			method: 'POST',
-			body: formData,
-			mode: 'cors',
 			headers: {
-				host: 'go.dev',
-				accept: '*/*'
-			}
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				code: code
+			})
 		})
 			.then((res) => res.json())
 			.then((data) => {
@@ -35,25 +27,20 @@
 	}
 
 	async function handleFormat(): Promise<void> {
-		let formData: FormData = new FormData();
-		formData.append('version', '2');
-		formData.append('body', code);
-		formData.append('withVet', 'true');
-
-		// call our own backend endpoint later.
-		const res = await fetch('https://go.dev/_/compile?backend=', {
+		const res = await fetch('/api/format', {
 			method: 'POST',
-			body: formData,
-			mode: 'cors',
 			headers: {
-				host: 'go.dev',
-				accept: '*/*'
-			}
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				code: code
+			})
 		})
 			.then((res) => res.json())
 			.then((data) => {
-				result = data.Events[0].Message;
-				resultHeight = result.split(/\r\n|\r|\n/).length;
+				code = data.Body;
+				height = code.split(/\r\n|\r|\n/).length;
 			});
 	}
 </script>
@@ -65,12 +52,9 @@
 		>
 		<div class="flex flex-row">
 			<div class="w-[3%] py-1 text-sm">
-				<div>1</div>
-				<div>2</div>
-				<div>3</div>
-				<div>4</div>
-				<div>5</div>
-				<div>6</div>
+				{#each Array(height) as _, index}
+					<div>{index + 1}</div>
+				{/each}
 			</div>
 
 			<textarea
@@ -95,12 +79,9 @@
 		>
 		<div class="flex flex-row">
 			<div class="w-[3%] py-1 text-sm">
-				<div>1</div>
-				<div>2</div>
-				<div>3</div>
-				<div>4</div>
-				<div>5</div>
-				<div>6</div>
+				{#each Array(resultHeight) as _, index}
+					<div>{index + 1}</div>
+				{/each}
 			</div>
 
 			<textarea

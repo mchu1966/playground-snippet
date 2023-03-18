@@ -14,51 +14,44 @@ var (
 )
 
 func routers(g *bunrouter.Group) {
-	g.GET("/users/:id", debugHandler)
-	g.GET("/users/current", debugHandler)
-	g.GET("/users/*path", debugHandler)
-	g.GET("/test", testHandler)
+	g.POST("/run", runHandler)
+	g.POST("/format", formatHandler)
 }
 
 func init() {
 	router.WithGroup("/api", routers)
 }
 
-func testHandler(w http.ResponseWriter, r bunrouter.Request) error {
-	form := url.Values{}
-	form.Add("version", "2")
-	code := `
-// You can edit this code!
-// Click here and start typing.
-package main
+func runHandler(w http.ResponseWriter, r bunrouter.Request) error {
+	defer r.Body.Close()
 
-import "fmt"
-
-func main() {
-	fmt.Println("Hello, 世界")
-}
-`
-	form.Add("body", code)
-	form.Add("withVet", "true")
-
-	url := "https://go.dev/_/compile?backend="
-	res, err := http.PostForm(url, form)
-	// req, err := http.NewRequest("POST", url, strings.NewReader(form.Encode()))
+	rByte, err := io.ReadAll(r.Body)
 	if err != nil {
 		return bunrouter.JSON(w, bunrouter.H{
 			"error": err.Error(),
 		})
 	}
 
-	// req.Header.Add("accept", "*/*")
-	// req.Header.Add("host", "go.dev")
+	var body = make(map[string]interface{})
+	err = json.Unmarshal(rByte, &body)
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
 
-	// res, err := http.DefaultClient.Do(req)
-	// if err != nil {
-	// 	return bunrouter.JSON(w, bunrouter.H{
-	// 		"error": err.Error(),
-	// 	})
-	// }
+	form := url.Values{}
+	form.Add("version", "2")
+	form.Add("body", body["code"].(string))
+	form.Add("withVet", "true")
+	url := "https://go.dev/_/compile?backend="
+
+	res, err := http.PostForm(url, form)
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
 
 	defer res.Body.Close()
 	b, err := io.ReadAll(res.Body)
@@ -79,11 +72,53 @@ func main() {
 	return bunrouter.JSON(w, m)
 }
 
-func debugHandler(w http.ResponseWriter, req bunrouter.Request) error {
-	return bunrouter.JSON(w, bunrouter.H{
-		"route":  req.Route(),
-		"params": req.Params().Map(),
-	})
+func formatHandler(w http.ResponseWriter, r bunrouter.Request) error {
+	defer r.Body.Close()
+
+	rByte, err := io.ReadAll(r.Body)
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
+
+	var body = make(map[string]interface{})
+	err = json.Unmarshal(rByte, &body)
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
+
+	form := url.Values{}
+	form.Add("body", body["code"].(string))
+	form.Add("imports", "true")
+	url := "https://go.dev/_/fmt?backend="
+
+	res, err := http.PostForm(url, form)
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
+
+	defer res.Body.Close()
+	b, err := io.ReadAll(res.Body)
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
+
+	var m = make(map[string]interface{})
+	err = json.Unmarshal(b, &m)
+	if err != nil {
+		return bunrouter.JSON(w, bunrouter.H{
+			"error": err.Error(),
+		})
+	}
+
+	return bunrouter.JSON(w, m)
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
