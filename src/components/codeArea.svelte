@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
+	import Svg from 'components/svg.svelte';
 	export let code: string;
 
 	let result: string = '';
@@ -8,41 +7,68 @@
 	let resultHeight: number;
 	$: height = code.split(/\r\n|\r|\n/).length;
 
+	let loading: boolean = false;
 	async function handleRun(): Promise<void> {
-		await handleFormat();
-		const res = await fetch('/api/run', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				code: code
+		let isDevEnv: boolean = import.meta.env.DEV;
+		if (isDevEnv) {
+			loading = true;
+			console.log('run started');
+			await new Promise((f) => setTimeout(f, 1000));
+			loading = false;
+			console.log('run ended');
+			result = 'RESULT';
+			resultHeight = 3;
+		} else {
+			await handleFormat();
+			loading = true;
+			const res = await fetch('/api/run', {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					code: code
+				})
 			})
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				result = data.Events[0].Message;
-				resultHeight = result.split(/\r\n|\r|\n/).length;
-			});
+				.then((res) => res.json())
+				.then((data) => {
+					result = data.Events[0].Message;
+					resultHeight = result.split(/\r\n|\r|\n/).length;
+				});
+			loading = false;
+		}
 	}
 
 	async function handleFormat(): Promise<void> {
-		const res = await fetch('/api/format', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				code: code
+		let isDevEnv: boolean = import.meta.env.DEV;
+		if (isDevEnv) {
+			loading = true;
+			console.log('format started');
+			await new Promise((f) => setTimeout(f, 1000));
+			loading = false;
+			console.log('format ended');
+			result = 'RESULT';
+			resultHeight = 3;
+		} else {
+			loading = true;
+			const res = await fetch('/api/format', {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					code: code
+				})
 			})
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				code = data.Body;
-				height = code.split(/\r\n|\r|\n/).length;
-			});
+				.then((res) => res.json())
+				.then((data) => {
+					code = data.Body;
+					height = code.split(/\r\n|\r|\n/).length;
+				});
+			loading = false;
+		}
 	}
 </script>
 
@@ -66,14 +92,29 @@
 			/>
 		</div>
 		<div class="p-2">
-			<button type="submit" class="shadow-black rounded-lg border text-sm p-1" on:click={handleRun}
-				>Run</button
-			>
-			<button
-				type="submit"
-				class="shadow-black rounded-lg border text-sm p-1"
-				on:click={handleFormat}>Format</button
-			>
+			{#if !loading}
+				<button
+					disabled={loading}
+					type="submit"
+					class="shadow-black rounded-lg border text-sm p-1 {loading ? 'cursor-not-allowed' : ''}"
+					on:click={handleRun}
+				>
+					Run
+				</button>
+
+				<button
+					disabled={loading}
+					type="submit"
+					class="shadow-black rounded-lg border text-sm p-1 {loading ? 'cursor-not-allowed' : ''}"
+					on:click={handleFormat}
+				>
+					Format
+				</button>
+			{:else}
+				<div class="p-3">
+					<Svg name="arrow-path" class="animate-spin w-4 h-4 stroke-1 stroke-current fill-none" />
+				</div>
+			{/if}
 		</div>
 	</div>
 	<div class="block p-2.5 w-full md:w-1/2">
