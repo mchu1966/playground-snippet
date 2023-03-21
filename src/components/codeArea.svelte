@@ -2,12 +2,12 @@
 	import Svg from 'components/svg.svelte';
 	export let code: string;
 
-	let result: string = '';
+	let result: string;
 	let height: number;
 	let resultHeight: number;
 	$: height = code.split(/\r\n|\r|\n/).length;
 
-	let loading: boolean = false;
+	let loading = false;
 	async function handleRun(): Promise<void> {
 		let isDevEnv: boolean = import.meta.env.DEV;
 		if (isDevEnv) {
@@ -63,7 +63,7 @@
 	async function handleFormat(): Promise<boolean> {
 		let isDevEnv: boolean = import.meta.env.DEV;
 		if (isDevEnv) {
-			let valid: boolean = false;
+			let valid = false;
 			loading = true;
 			let formData: FormData = new FormData();
 			formData.append('body', code);
@@ -100,7 +100,7 @@
 			loading = false;
 			return valid;
 		} else {
-			let valid: boolean = false;
+			let valid = false;
 			loading = true;
 			await fetch('/api/format', {
 				method: 'POST',
@@ -130,7 +130,7 @@
 </script>
 
 <div class="flex flex-wrap">
-	<div class="block p-2.5 w-full md:w-1/2">
+	<div class="block w-full p-2.5 md:w-1/2">
 		<label for="large-input" class="block text-sm font-medium text-gray-900">Code</label>
 		<div class="flex flex-row">
 			<div class="w-[5%] py-1 pr-1 text-sm">
@@ -143,7 +143,7 @@
 				id="message"
 				rows={height}
 				wrap="off"
-				class="resize-none leading-5 h-grow w-full py-1 px-2 text-sm text-gray-900 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+				class="h-grow w-full resize-none bg-gray-50 py-1 px-2 text-sm leading-5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 "
 				placeholder="Type your code here..."
 				bind:value={code}
 			/>
@@ -153,7 +153,7 @@
 				<button
 					disabled={loading}
 					type="submit"
-					class="shadow-black rounded-lg border text-sm p-1 {loading ? 'cursor-not-allowed' : ''}"
+					class="rounded-lg border p-1 text-sm shadow-black {loading ? 'cursor-not-allowed' : ''}"
 					on:click={handleRun}
 				>
 					Run
@@ -162,19 +162,19 @@
 				<button
 					disabled={loading}
 					type="submit"
-					class="shadow-black rounded-lg border text-sm p-1 {loading ? 'cursor-not-allowed' : ''}"
+					class="rounded-lg border p-1 text-sm shadow-black {loading ? 'cursor-not-allowed' : ''}"
 					on:click={handleFormat}
 				>
 					Format
 				</button>
 			{:else}
 				<div class="p-3">
-					<Svg name="arrow-path" class="animate-spin w-4 h-4 stroke-1 stroke-current fill-none" />
+					<Svg name="arrow-path" class="h-4 w-4 animate-spin fill-none stroke-current stroke-1" />
 				</div>
 			{/if}
 		</div>
 	</div>
-	<div class="block p-2.5 w-full md:w-1/2">
+	<div class="block w-full p-2.5 md:w-1/2">
 		<label for="large-input" class="block text-sm font-medium text-gray-900">Result</label>
 		<div class="flex flex-row">
 			<div class="w-[3%] py-1 text-sm">
@@ -188,7 +188,7 @@
 				id="output"
 				rows={resultHeight}
 				wrap="off"
-				class="resize-none leading-5 h-grow w-full py-1 px-2 text-sm text-gray-900 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+				class="h-grow w-full resize-none bg-gray-50 py-1 px-2 text-sm leading-5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 "
 				>{result}</textarea
 			>
 		</div>

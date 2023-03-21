@@ -17,21 +17,22 @@ import "fmt"
 
 func main() {
 	fmt.Println("Hello, 世界")
-}`
+}
+`
 		}
 	];
 
-	function handleAddNew(s: any) {
+	function handleAddNew(s: CustomEvent<snippet>) {
 		mockSnippets = [...mockSnippets, s.detail];
 	}
 </script>
 
-<div class="container dark:bg-gray-400 h-screen self-center">
+<div class="container h-screen self-center dark:bg-gray-400">
 	<Header on:addNew={handleAddNew} />
 	<!-- https://eternaldev.com/blog/5-ways-to-perform-for-loop-in-svelte-each-block/ -->
 	{#each mockSnippets as snippet, index}
 		<div class="p-4">
-			<div class="w-full flex flex-row">
+			<div class="flex w-full flex-row">
 				<input bind:value={snippet.name} placeholder={snippet.name} class="w-full" />
 			</div>
 			<CodeArea code={snippet.code} />

@@ -10,8 +10,8 @@ const config = {
 			darkMode: 'class'
 		},
 		container: {
-			center: true,
-		},
+			center: true
+		}
 	},
 	darkMode: 'class'
 };
