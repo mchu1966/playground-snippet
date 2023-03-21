@@ -26,7 +26,7 @@ func main() {
 	}
 </script>
 
-<div class="px-2 dark:bg-gray-400 h-screen">
+<div class="container dark:bg-gray-400 h-screen self-center">
 	<Header on:addNew={handleAddNew} />
 	<!-- https://eternaldev.com/blog/5-ways-to-perform-for-loop-in-svelte-each-block/ -->
 	{#each mockSnippets as snippet, index}

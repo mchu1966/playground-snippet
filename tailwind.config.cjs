@@ -8,7 +8,10 @@ const config = {
 				12: '3rem'
 			},
 			darkMode: 'class'
-		}
+		},
+		container: {
+			center: true,
+		},
 	},
 	darkMode: 'class'
 };
