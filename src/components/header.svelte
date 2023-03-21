@@ -20,25 +20,26 @@
 </script>
 
 <div
-	class="sticky top-0 flex flex-row content-center bg-white/90 p-2 backdrop-blur transition-colors dark:border-slate-50/[0.06] dark:bg-transparent"
+	class="sticky top-0 flex flex-row content-center  bg-transparent p-2 backdrop-blur transition-colors dark:border-slate-50/[0.06]"
 >
-	<div class="content-center p-4 font-bold"><h1>Playground Snippet</h1></div>
+	<div class="mx-2 content-center p-4 font-bold"><h1>Playground Snippet</h1></div>
 	<button
-		class="duration-600 rounded-full border bg-cyan-500 p-2 shadow-md shadow-cyan-500/50 transition ease-in-out"
-		on:click={handleAddNew}>Add new</button
+		class="duration-600 mx-2 w-20 rounded-3xl p-1 shadow-lg shadow-gray-500/50 transition ease-in-out hover:bg-slate-400"
+		on:click={handleAddNew}>Add</button
 	>
+
 	<button
-		class="duration-600 rounded-full border bg-cyan-500 p-2 shadow-md shadow-cyan-500/50 transition ease-in-out"
+		class="duration-600 mx-2 w-20 rounded-3xl p-1 shadow-lg shadow-gray-500/50 transition ease-in-out hover:bg-slate-400"
 		>Save</button
 	>
 	<div class="grow" />
 	<button
-		class="duration-600 border-collapse rounded-full bg-cyan-500 p-2 shadow-cyan-500/50 transition ease-in-out "
+		class="duration-600 mx-2 rounded-3xl p-1 shadow-lg shadow-gray-500/50 transition ease-in-out hover:bg-slate-400 dark:bg-gray-800 dark:hover:shadow-xl  dark:hover:shadow-white/70"
 		on:click={handleSwitchDarkMode}
 		>{#if darkMode}
-			<Svg name="sun" class="h-5 w-5 fill-none stroke-white stroke-2" />
+			<Svg name="sun" class="m-3 h-5 w-5 fill-none stroke-white stroke-2" />
 		{:else}
-			<Svg name="moon" class="fill-solid h-5 w-5 stroke-current stroke-2" />
+			<Svg name="moon" class="fill-solid m-3 h-5 w-5 stroke-current stroke-2" />
 		{/if}</button
 	>
 </div>

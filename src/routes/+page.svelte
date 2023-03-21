@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CodeArea from 'components/codeArea.svelte';
+	import SnippetArea from 'components/snippetArea.svelte';
 	import Header from 'components/header.svelte';
 	// fetch database to get the snippets (array of string of size N)
 	type snippet = {
@@ -27,15 +27,19 @@ func main() {
 	}
 </script>
 
-<div class="container h-screen self-center dark:bg-gray-400">
-	<Header on:addNew={handleAddNew} />
+<Header on:addNew={handleAddNew} />
+<div class="container h-screen self-center dark:bg-black">
 	<!-- https://eternaldev.com/blog/5-ways-to-perform-for-loop-in-svelte-each-block/ -->
 	{#each mockSnippets as snippet, index}
 		<div class="p-4">
 			<div class="flex w-full flex-row">
-				<input bind:value={snippet.name} placeholder={snippet.name} class="w-full" />
+				<input
+					bind:value={snippet.name}
+					placeholder={snippet.name}
+					class="w-full dark:bg-gray-900"
+				/>
 			</div>
-			<CodeArea code={snippet.code} />
+			<SnippetArea code={snippet.code} />
 		</div>
 	{/each}
 </div>
