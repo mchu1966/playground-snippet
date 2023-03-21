@@ -20,8 +20,9 @@
 </script>
 
 <div
-	class="sticky top-0 flex flex-row content-center bg-white p-2 backdrop-blur transition-colors dark:border-slate-50/[0.06]"
+	class="sticky top-0 flex flex-row content-center bg-white/90 p-2 backdrop-blur transition-colors dark:border-slate-50/[0.06] dark:bg-transparent"
 >
+	<div class="content-center p-4 font-bold"><h1>Playground Snippet</h1></div>
 	<button
 		class="duration-600 rounded-full border bg-cyan-500 p-2 shadow-md shadow-cyan-500/50 transition ease-in-out"
 		on:click={handleAddNew}>Add new</button

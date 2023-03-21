@@ -2,5 +2,13 @@
 
 /* Write your global styles here, in PostCSS syntax */
 @tailwind base;
+
+@layer base {
+	div {
+		@apply font-mono;
+		@apply antialiased;
+	}
+}
+
 @tailwind components;
 @tailwind utilities;
