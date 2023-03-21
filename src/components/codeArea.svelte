@@ -11,16 +11,34 @@
 	async function handleRun(): Promise<void> {
 		let isDevEnv: boolean = import.meta.env.DEV;
 		if (isDevEnv) {
+			await handleFormat().then((valid) => {
+				console.log(valid);
+			});
+			let formData: FormData = new FormData();
+			formData.append('version', '2');
+			formData.append('body', code);
+			formData.append('withVet', 'true');
+
+			// call our own backend endpoint later.
 			loading = true;
-			console.log('run started');
-			await new Promise((f) => setTimeout(f, 1000));
+			await fetch('https://go.dev/_/compile?backend=', {
+				method: 'POST',
+				body: formData,
+				mode: 'cors',
+				headers: {
+					host: 'go.dev',
+					accept: '*/*'
+				}
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					result = data.Events[0].Message;
+					resultHeight = result.split(/\r\n|\r|\n/).length;
+				});
 			loading = false;
-			console.log('run ended');
-			result = 'RESULT';
-			resultHeight = 3;
 		} else {
-			await handleFormat().then((data) => {
-				console.log(data);
+			await handleFormat().then((valid) => {
+				console.log(valid);
 			});
 			loading = true;
 			await fetch('/api/run', {
@@ -42,17 +60,47 @@
 		}
 	}
 
-	async function handleFormat(): Promise<void> {
+	async function handleFormat(): Promise<boolean> {
 		let isDevEnv: boolean = import.meta.env.DEV;
 		if (isDevEnv) {
+			let valid: boolean = false;
 			loading = true;
-			console.log('format started');
-			await new Promise((f) => setTimeout(f, 1000));
+			let formData: FormData = new FormData();
+			formData.append('body', code);
+			formData.append('imports', 'true');
+
+			let form: string =
+				encodeURIComponent('body') +
+				'=' +
+				encodeURIComponent(code) +
+				'&' +
+				encodeURIComponent('imports') +
+				'=' +
+				encodeURIComponent('true');
+
+			// call our own backend endpoint later.
+			await fetch('https://go.dev/_/fmt?backend=', {
+				method: 'POST',
+				body: form,
+				headers: {
+					'content-type': 'application/x-www-form-urlencoded'
+				}
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					valid = data.Error == '';
+					if (valid) {
+						code = data.Body;
+						height = code.split(/\r\n|\r|\n/).length;
+					} else {
+						result = data.Error;
+						resultHeight = result.split(/\r\n|\r|\n/).length;
+					}
+				});
 			loading = false;
-			console.log('format ended');
-			result = 'RESULT';
-			resultHeight = 3;
+			return valid;
 		} else {
+			let valid: boolean = false;
 			loading = true;
 			await fetch('/api/format', {
 				method: 'POST',
@@ -66,11 +114,17 @@
 			})
 				.then((res) => res.json())
 				.then((data) => {
-					let valid: boolean = data.Error == '';
-					valid ? (code = data.Body) : (result = data.Error);
-					height = valid ? code.split(/\r\n|\r|\n/).length : result.split(/\r\n|\r|\n/).length;
+					valid = data.Error == '';
+					if (valid) {
+						code = data.Body;
+						height = code.split(/\r\n|\r|\n/).length;
+					} else {
+						result = data.Error;
+						resultHeight = result.split(/\r\n|\r|\n/).length;
+					}
 				});
 			loading = false;
+			return valid;
 		}
 	}
 </script>
