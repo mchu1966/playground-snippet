@@ -110,7 +110,7 @@ func formatHandler(w http.ResponseWriter, r bunrouter.Request) error {
 		})
 	}
 
-	var m = make(map[string]interface{})
+	var m = make(map[string]string)
 	err = json.Unmarshal(b, &m)
 	if err != nil {
 		return bunrouter.JSON(w, bunrouter.H{

@@ -19,9 +19,11 @@
 			result = 'RESULT';
 			resultHeight = 3;
 		} else {
-			await handleFormat();
+			await handleFormat().then((data) => {
+				console.log(data);
+			});
 			loading = true;
-			const res = await fetch('/api/run', {
+			await fetch('/api/run', {
 				method: 'POST',
 				headers: {
 					Accept: 'application/json',
@@ -52,7 +54,7 @@
 			resultHeight = 3;
 		} else {
 			loading = true;
-			const res = await fetch('/api/format', {
+			await fetch('/api/format', {
 				method: 'POST',
 				headers: {
 					Accept: 'application/json',
@@ -64,8 +66,9 @@
 			})
 				.then((res) => res.json())
 				.then((data) => {
-					code = data.Body;
-					height = code.split(/\r\n|\r|\n/).length;
+					let valid: boolean = data.Error == '';
+					valid ? (code = data.Body) : (result = data.Error);
+					height = valid ? code.split(/\r\n|\r|\n/).length : result.split(/\r\n|\r|\n/).length;
 				});
 			loading = false;
 		}
