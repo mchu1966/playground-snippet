@@ -31,13 +31,15 @@ func main() {
 <div class="container h-screen self-center dark:bg-black">
 	<!-- https://eternaldev.com/blog/5-ways-to-perform-for-loop-in-svelte-each-block/ -->
 	{#each mockSnippets as snippet, index}
-		<div class="p-4">
+		<div class="p-4" id={snippet.name}>
 			<div class="flex w-full flex-row">
-				<input
-					bind:value={snippet.name}
-					placeholder={snippet.name}
-					class="w-full dark:bg-gray-900"
-				/>
+				<a href="#{snippet.name}">
+					<input
+						bind:value={snippet.name}
+						placeholder={snippet.name}
+						class="w-full dark:bg-gray-900"
+					/>
+				</a>
 			</div>
 			<SnippetArea code={snippet.code} />
 		</div>

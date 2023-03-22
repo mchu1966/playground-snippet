@@ -25,12 +25,14 @@
 </script>
 
 <div
-	class="sticky top-0 flex flex-row content-center  bg-transparent p-2 backdrop-blur transition-colors dark:border-slate-50/[0.06]"
+	class="sticky bottom-full top-0 flex flex-row content-center bg-transparent p-2 backdrop-blur transition-colors dark:border-slate-50/[0.06]"
 >
 	<div
 		class=" relative inline-block  content-center p-4 before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-pink-500 "
 	>
-		<div class="relative text-2xl font-bold text-white ">Playground Snippet</div>
+		<div class="relative text-2xl font-bold text-white ">
+			<a href="/"> Playground Snippet </a>
+		</div>
 	</div>
 	<div class="grow" />
 	{#if !loggedIn}
