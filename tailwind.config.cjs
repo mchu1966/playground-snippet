@@ -7,7 +7,10 @@ const config = {
 				'extra-loose': '2.5',
 				12: '3rem'
 			},
-			darkMode: 'class'
+			darkMode: 'class',
+			boxShadow: {
+				'bt-xl': '0 35px 60px -60px rgba(0, 0, 0, 0.3)'
+			}
 		},
 		container: {
 			center: true

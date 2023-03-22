@@ -17,25 +17,31 @@
 			? document.documentElement.classList.add('dark')
 			: document.documentElement.classList.remove('dark');
 	}
+
+	let loggedIn = false;
+	async function handleLog() {
+		loggedIn = !loggedIn;
+	}
 </script>
 
 <div
 	class="sticky top-0 flex flex-row content-center  bg-transparent p-2 backdrop-blur transition-colors dark:border-slate-50/[0.06]"
 >
-	<div class="mx-2 content-center p-4 font-bold"><h1>Playground Snippet</h1></div>
-	<button
-		class="duration-600 mx-2 w-20 rounded-3xl p-1 shadow-lg shadow-gray-500/50 transition ease-in-out hover:bg-slate-400"
-		on:click={handleAddNew}>Add</button
+	<div
+		class=" relative inline-block  content-center p-4 before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-pink-500 "
 	>
-
-	<button
-		class="duration-600 mx-2 w-20 rounded-3xl p-1 shadow-lg shadow-gray-500/50 transition ease-in-out hover:bg-slate-400"
-		>Save</button
-	>
+		<div class="relative text-2xl font-bold text-white ">Playground Snippet</div>
+	</div>
 	<div class="grow" />
-	<button
-		class="duration-600 mx-2 rounded-3xl p-1 shadow-lg shadow-gray-500/50 transition ease-in-out hover:bg-slate-400 dark:bg-gray-800 dark:hover:shadow-xl  dark:hover:shadow-white/70"
-		on:click={handleSwitchDarkMode}
+	{#if !loggedIn}
+		<button class="duration-800 header-btn" on:click={handleLog}>Login</button>
+	{:else}
+		<button class="duration-800 header-btn" on:click={handleLog}>Logout</button>
+	{/if}
+	<button class="duration-800 header-btn" on:click={handleAddNew}>Add</button>
+
+	<button class="duration-800 header-btn">Save</button>
+	<button class="duration-800 header-btn w-12 " on:click={handleSwitchDarkMode}
 		>{#if darkMode}
 			<Svg name="sun" class="m-3 h-5 w-5 fill-none stroke-white stroke-2" />
 		{:else}
