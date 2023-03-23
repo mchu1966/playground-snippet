@@ -2,7 +2,7 @@
 	import Svg from 'components/svg.svelte';
 	export let code: string;
 
-	let result: string;
+	let result = '';
 	let height: number;
 	let resultHeight: number;
 	$: height = code.split(/\r\n|\r|\n/).length;

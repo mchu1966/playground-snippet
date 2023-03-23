@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Svg from 'components/svg.svelte';
+	import LoginModal from './auth/loginModal.svelte';
 
 	import { createEventDispatcher } from 'svelte';
 
@@ -19,13 +20,19 @@
 	}
 
 	let loggedIn = false;
+	let open = false;
+	function closeModal(e: CustomEvent<boolean>) {
+		open = e.detail;
+	}
 	async function handleLog() {
 		loggedIn = !loggedIn;
 	}
 </script>
 
 <div
-	class="sticky bottom-full top-0 flex flex-row content-center bg-transparent p-2 backdrop-blur transition-colors dark:border-slate-50/[0.06]"
+	class="{open
+		? 'hidden'
+		: 'sticky'} top-0 flex flex-row content-center bg-transparent p-2 backdrop-blur-xl transition-colors dark:border-slate-50/[0.06]"
 >
 	<div
 		class=" relative inline-block  content-center p-4 before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-pink-500 "
@@ -36,7 +43,12 @@
 	</div>
 	<div class="grow" />
 	{#if !loggedIn}
-		<button class="duration-800 header-btn" on:click={handleLog}>Login</button>
+		<button
+			class="duration-800 header-btn"
+			on:click={() => {
+				open = !open;
+			}}>Login</button
+		>
 	{:else}
 		<button class="duration-800 header-btn" on:click={handleLog}>Logout</button>
 	{/if}
@@ -51,3 +63,7 @@
 		{/if}</button
 	>
 </div>
+
+{#if open}
+	<LoginModal on:closeModel={closeModal} />
+{/if}
