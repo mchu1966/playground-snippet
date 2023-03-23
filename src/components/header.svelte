@@ -23,7 +23,10 @@
 	let open = false;
 	function closeModal(e: CustomEvent<boolean>) {
 		open = e.detail;
+		document.getElementsByTagName('BODY')[0].classList.remove('overflow-hidden');
+		document.getElementsByTagName('BODY')[0].classList.add('overflow-auto');
 	}
+
 	async function handleLog() {
 		loggedIn = !loggedIn;
 	}
@@ -32,12 +35,11 @@
 <div
 	class="{open
 		? 'hidden'
-		: 'sticky'} top-0 flex flex-row content-center bg-transparent p-2 backdrop-blur-xl transition-colors dark:border-slate-50/[0.06]"
+		: 'fixed'} top-0 flex w-full flex-row content-center bg-transparent p-2 backdrop-blur-xl transition-colors dark:border-slate-50/[0.06]"
 >
-	<div
-		class=" relative inline-block  content-center p-4 before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-pink-500 "
-	>
-		<div class="relative text-2xl font-bold text-white ">
+	<div class="inline-block content-center p-4 ">
+		<!-- before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-pink-500  -->
+		<div class="text-2xl font-bold text-black ">
 			<a href="/"> Playground Snippet </a>
 		</div>
 	</div>
@@ -46,14 +48,14 @@
 		<button
 			class="duration-800 header-btn"
 			on:click={() => {
-				open = !open;
+				open = true;
+				document.getElementsByTagName('BODY')[0].classList.add('overflow-hidden');
 			}}>Login</button
 		>
 	{:else}
 		<button class="duration-800 header-btn" on:click={handleLog}>Logout</button>
 	{/if}
 	<button class="duration-800 header-btn" on:click={handleAddNew}>Add</button>
-
 	<button class="duration-800 header-btn">Save</button>
 	<button class="duration-800 header-btn w-12 " on:click={handleSwitchDarkMode}
 		>{#if darkMode}
@@ -63,6 +65,7 @@
 		{/if}</button
 	>
 </div>
+<div class="invisible h-[104px] bg-cyan-300 sm:h-[72px]" />
 
 {#if open}
 	<LoginModal on:closeModel={closeModal} />

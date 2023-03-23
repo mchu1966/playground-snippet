@@ -13,7 +13,7 @@
 		on:keydown={closeModal}
 	/>
 	<div class="z-50">
-		<div class="pointer-events-none absolute h-full w-full">
+		<div class="pointer-events-none fixed top-0 left-0 right-0 bottom-0 h-full w-full">
 			<div class="grid min-h-screen place-items-center">
 				<div class="pointer-events-auto w-11/12 bg-white p-12 sm:w-8/12 md:w-1/2 lg:w-5/12">
 					<h1 class="text-xl font-semibold">

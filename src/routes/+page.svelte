@@ -28,12 +28,12 @@ func main() {
 </script>
 
 <Header on:addNew={handleAddNew} />
-<div class="container h-screen self-center dark:bg-black">
+<div class="container h-full self-center dark:bg-black">
 	<!-- https://eternaldev.com/blog/5-ways-to-perform-for-loop-in-svelte-each-block/ -->
 	{#each mockSnippets as snippet, index}
-		<div class="p-4" id={snippet.name}>
-			<div class="flex w-full flex-row">
-				<a href="#{snippet.name}">
+		<div class="scroll-mt-28 p-4 sm:scroll-mt-20" id={snippet.name + index}>
+			<div class="flex w-full  flex-row">
+				<a href="#{snippet.name + index}">
 					<input
 						bind:value={snippet.name}
 						placeholder={snippet.name}
