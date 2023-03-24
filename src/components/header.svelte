@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Svg from 'components/svg.svelte';
 	import LoginModal from './auth/loginModal.svelte';
+	import SignupModal from './auth/signupModal.svelte';
 
 	import { createEventDispatcher } from 'svelte';
 
@@ -19,14 +20,18 @@
 			: document.documentElement.classList.remove('dark');
 	}
 
-	let loggedIn = false;
 	let open = false;
 	function closeModal(e: CustomEvent<boolean>) {
 		open = e.detail;
 		document.getElementsByTagName('BODY')[0].classList.remove('overflow-hidden');
 		document.getElementsByTagName('BODY')[0].classList.add('overflow-auto');
 	}
+	let signupModalOn = false;
+	function switchSignup(e: CustomEvent<boolean>) {
+		signupModalOn = e.detail;
+	}
 
+	let loggedIn = false;
 	async function handleLog() {
 		loggedIn = !loggedIn;
 	}
@@ -68,5 +73,9 @@
 <div class="invisible h-[104px] bg-cyan-300 sm:h-[72px]" />
 
 {#if open}
-	<LoginModal on:closeModel={closeModal} />
+	{#if !signupModalOn}
+		<LoginModal on:closeModel={closeModal} on:switchSignup={switchSignup} />
+	{:else}
+		<SignupModal on:closeModel={closeModal} on:switchSignup={switchSignup} />
+	{/if}
 {/if}

@@ -7,7 +7,7 @@
 
 	let dispatchSwitchSignup = createEventDispatcher<{ switchSignup: boolean }>();
 	function switchSignup() {
-		dispatchSwitchSignup('switchSignup', true);
+		dispatchSwitchSignup('switchSignup', false);
 	}
 </script>
 
@@ -21,7 +21,7 @@
 		<div class="pointer-events-none fixed top-0 left-0 right-0 bottom-0 h-full w-full">
 			<div class="grid min-h-screen place-items-center">
 				<div
-					class="pointer-events-auto w-11/12 bg-white p-12 dark:bg-black sm:w-8/12 md:w-1/2 lg:w-5/12"
+					class="pointer-events-auto w-11/12 bg-white p-12 dark:bg-black sm:w-8/12 md:w-1/2 lg:w-5/12 "
 				>
 					<h1 class="text-xl font-semibold dark:text-white">
 						Welcome back, <span class="font-normal">sign in to continue</span>
@@ -56,22 +56,17 @@
 								type="submit"
 								class="mt-6 w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
 							>
-								Sign in
+								Sign up
 							</button>
 							<div class="h-px w-full bg-black dark:bg-white" />
 							<!-- oauth buttons here -->
 							<button
 								on:click={switchSignup}
-								class=" w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
+								class="w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
 							>
-								Sign up
+								Already have account? Login here
 							</button>
 						</div>
-						<p
-							class="mt-4 inline-block  cursor-pointer justify-between text-xs text-gray-500 hover:text-black"
-						>
-							Forgot password?
-						</p>
 					</form>
 				</div>
 			</div>
