@@ -58,7 +58,22 @@
 							>
 								Sign in
 							</button>
-							<div class="h-px w-full bg-black dark:bg-white" />
+							<button
+								class="w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
+								on:click={() => {
+									// supabase.auth.signInWithOAuth({
+									// 	provider: 'google',
+									// 	options: { scopes: 'https://www.googleapis.com/auth/userinfo.email' }
+									// });
+								}}
+							>
+								Google
+							</button>
+							<div class="flex flex-row">
+								<div class="h-px w-full self-center bg-black dark:bg-white" />
+								<div class="px-2">or</div>
+								<div class="h-px w-full self-center bg-black dark:bg-white" />
+							</div>
 							<!-- oauth buttons here -->
 							<button
 								on:click={switchSignup}
