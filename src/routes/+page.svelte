@@ -2,25 +2,10 @@
 	import SnippetArea from 'components/snippetArea.svelte';
 	import Header from 'components/header.svelte';
 	// fetch database to get the snippets (array of string of size N)
+
 	import type { snippet } from '$lib/types/snippet';
-	let mockSnippets: snippet[] = [
-		{
-			name: 'Hello World',
-			code: `// You can edit this code!
-// Click here and start typing.
-package main
-
-import "fmt"
-
-func main() {
-	fmt.Println("Hello, 世界")
-}
-`
-		}
-	];
-
 	function handleAddNew(s: CustomEvent<snippet>) {
-		mockSnippets = [...mockSnippets, s.detail];
+		data.mockSnippets = [...data.mockSnippets, s.detail];
 	}
 
 	import type { PageData } from './$types';
@@ -30,7 +15,7 @@ func main() {
 <Header on:addNew={handleAddNew} {data} />
 <div class="container h-full self-center dark:bg-black">
 	<!-- https://eternaldev.com/blog/5-ways-to-perform-for-loop-in-svelte-each-block/ -->
-	{#each mockSnippets as snippet, index}
+	{#each data.mockSnippets as snippet, index}
 		<div class="scroll-mt-28 p-4 sm:scroll-mt-20" id={snippet.name + index}>
 			<div class="flex w-full  flex-row">
 				<a href="#{snippet.name + index}">

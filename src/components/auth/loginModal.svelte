@@ -11,6 +11,7 @@
 	}
 
 	import type { PageData } from '../../routes/$types';
+	import ModalInput from 'components/auth/modalInput.svelte';
 	export let d: PageData;
 	$: supabase = d.supabase;
 
@@ -22,6 +23,7 @@
 		});
 		console.log(data, error);
 		d.session = data.session;
+		dispatchCloseModel('closeModel', false);
 	}
 </script>
 
@@ -37,34 +39,10 @@
 				<div
 					class="pointer-events-auto w-11/12 bg-white p-12 dark:bg-black sm:w-8/12 md:w-1/2 lg:w-5/12"
 				>
-					<h1 class="text-xl font-semibold dark:text-white">
-						Welcome back, <span class="font-normal">sign in to continue</span>
-					</h1>
+					<h1 class="text-xl font-semibold dark:text-white">Welcome back to your playground!</h1>
 					<form class="mt-6" on:submit|preventDefault={signInWithEmail}>
-						<label for="email" class="block text-xs font-semibold uppercase text-gray-600"
-							>E-mail</label
-						>
-						<input
-							id="email"
-							type="email"
-							name="email"
-							placeholder="john.doe@company.com"
-							autocomplete="email"
-							class="mt-2 block w-full appearance-none bg-gray-200 p-3 text-gray-700 focus:bg-gray-300 focus:shadow-inner focus:outline-none"
-							required
-						/>
-						<label for="password" class="mt-2 block text-xs font-semibold uppercase text-gray-600"
-							>Password</label
-						>
-						<input
-							id="password"
-							type="password"
-							name="password"
-							placeholder="********"
-							autocomplete="current-password"
-							class="mt-2 block w-full appearance-none bg-gray-200 p-3 text-gray-700 focus:bg-gray-300 focus:shadow-inner focus:outline-none"
-							required
-						/>
+						<ModalInput name="email" title="E-mail" placeholder="hello@playground.com" />
+						<ModalInput name="password" title="Password" placeholder="********" />
 						<button
 							type="submit"
 							class="mt-6 mb-4 w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
