@@ -55,7 +55,10 @@
 							class="w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
 							on:click={() => {
 								supabase.auth.signInWithOAuth({
-									provider: 'google'
+									provider: 'google',
+									options: {
+										redirectTo: '/'
+									}
 								});
 							}}
 						>
