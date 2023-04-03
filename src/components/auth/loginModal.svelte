@@ -21,7 +21,7 @@
 			email: formData.get('email') as string,
 			password: formData.get('password') as string
 		});
-		console.log(data, error);
+		// console.log(data, error);
 		d.session = data.session;
 		dispatchCloseModel('closeModel', false);
 	}

@@ -1,11 +1,18 @@
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
+import {
+	PUBLIC_SUPABASE_URL,
+	PUBLIC_SUPABASE_ANON_KEY,
+	PUBLIC_LOCAL_SUPABASE_URL,
+	PUBLIC_LOCAL_SUPABASE_ANON_KEY
+} from '$env/static/public';
+import type { Database } from '$lib/types/database.types';
 import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	event.locals.supabase = createSupabaseServerClient({
-		supabaseUrl: PUBLIC_SUPABASE_URL,
-		supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
+	const isDevEnv: boolean = import.meta.env.DEV;
+	event.locals.supabase = createSupabaseServerClient<Database>({
+		supabaseUrl: isDevEnv ? PUBLIC_LOCAL_SUPABASE_URL : PUBLIC_SUPABASE_URL,
+		supabaseKey: isDevEnv ? PUBLIC_LOCAL_SUPABASE_ANON_KEY : PUBLIC_SUPABASE_ANON_KEY,
 		event
 	});
 
