@@ -2,10 +2,7 @@
 	import SnippetArea from 'components/snippetArea.svelte';
 	import Header from 'components/header.svelte';
 	// fetch database to get the snippets (array of string of size N)
-	type snippet = {
-		name: string;
-		code: string;
-	};
+	import type { snippet } from '$lib/types/snippet';
 	let mockSnippets: snippet[] = [
 		{
 			name: 'Hello World',
@@ -25,9 +22,12 @@ func main() {
 	function handleAddNew(s: CustomEvent<snippet>) {
 		mockSnippets = [...mockSnippets, s.detail];
 	}
+
+	import type { PageData } from './$types';
+	export let data: PageData;
 </script>
 
-<Header on:addNew={handleAddNew} />
+<Header on:addNew={handleAddNew} {data} />
 <div class="container h-full self-center dark:bg-black">
 	<!-- https://eternaldev.com/blog/5-ways-to-perform-for-loop-in-svelte-each-block/ -->
 	{#each mockSnippets as snippet, index}

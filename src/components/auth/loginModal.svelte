@@ -9,6 +9,20 @@
 	function switchSignup() {
 		dispatchSwitchSignup('switchSignup', true);
 	}
+
+	import type { PageData } from '../../routes/$types';
+	export let d: PageData;
+	$: supabase = d.supabase;
+
+	async function signInWithEmail(e: SubmitEvent) {
+		const formData = new FormData(e.target as HTMLFormElement);
+		const { data, error } = await supabase.auth.signInWithPassword({
+			email: formData.get('email') as string,
+			password: formData.get('password') as string
+		});
+		console.log(data, error);
+		d.session = data.session;
+	}
 </script>
 
 <div>
@@ -26,7 +40,7 @@
 					<h1 class="text-xl font-semibold dark:text-white">
 						Welcome back, <span class="font-normal">sign in to continue</span>
 					</h1>
-					<form class="mt-6">
+					<form class="mt-6" on:submit|preventDefault={signInWithEmail}>
 						<label for="email" class="block text-xs font-semibold uppercase text-gray-600"
 							>E-mail</label
 						>
@@ -51,43 +65,42 @@
 							class="mt-2 block w-full appearance-none bg-gray-200 p-3 text-gray-700 focus:bg-gray-300 focus:shadow-inner focus:outline-none"
 							required
 						/>
-						<div class="grid gap-4">
-							<button
-								type="submit"
-								class="mt-6 w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
-							>
-								Sign in
-							</button>
-							<button
-								class="w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
-								on:click={() => {
-									// supabase.auth.signInWithOAuth({
-									// 	provider: 'google',
-									// 	options: { scopes: 'https://www.googleapis.com/auth/userinfo.email' }
-									// });
-								}}
-							>
-								Google
-							</button>
-							<div class="flex flex-row">
-								<div class="h-px w-full self-center bg-black dark:bg-white" />
-								<div class="px-2">or</div>
-								<div class="h-px w-full self-center bg-black dark:bg-white" />
-							</div>
-							<!-- oauth buttons here -->
-							<button
-								on:click={switchSignup}
-								class=" w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
-							>
-								Sign up
-							</button>
-						</div>
-						<p
-							class="mt-4 inline-block  cursor-pointer justify-between text-xs text-gray-500 hover:text-black"
+						<button
+							type="submit"
+							class="mt-6 mb-4 w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
 						>
-							Forgot password?
-						</p>
+							Sign in
+						</button>
 					</form>
+					<div class="grid gap-4">
+						<button
+							class="w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
+							on:click={() => {
+								supabase.auth.signInWithOAuth({
+									provider: 'google'
+								});
+							}}
+						>
+							Google
+						</button>
+						<div class="flex flex-row">
+							<div class="h-px w-full self-center bg-black dark:bg-white" />
+							<div class="px-2">or</div>
+							<div class="h-px w-full self-center bg-black dark:bg-white" />
+						</div>
+						<!-- oauth buttons here -->
+						<button
+							on:click={switchSignup}
+							class=" w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
+						>
+							Sign up
+						</button>
+					</div>
+					<p
+						class="mt-4 inline-block  cursor-pointer justify-between text-xs text-gray-500 hover:text-black"
+					>
+						Forgot password?
+					</p>
 				</div>
 			</div>
 		</div>

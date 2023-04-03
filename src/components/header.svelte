@@ -1,28 +1,20 @@
 <script lang="ts">
-	import Svg from 'components/svg.svelte';
 	import LoginModal from './auth/loginModal.svelte';
 	import SignupModal from './auth/signupModal.svelte';
+	import DarkModeButton from './darkModeButton.svelte';
 
 	import { createEventDispatcher } from 'svelte';
+	import type { snippet } from '$lib/types/snippet';
 
-	const dispatch = createEventDispatcher<{ addNew: { name: string; code: string } }>();
+	const dispatch = createEventDispatcher<{ addNew: snippet }>();
 
 	function handleAddNew() {
 		dispatch('addNew', { name: 'Type a name', code: `` });
 	}
 
-	let darkMode = false;
-	function handleSwitchDarkMode(): void {
-		darkMode = !darkMode;
-
-		darkMode
-			? document.documentElement.classList.add('dark')
-			: document.documentElement.classList.remove('dark');
-	}
-
-	let open = false;
+	let openModal = false;
 	function closeModal(e: CustomEvent<boolean>) {
-		open = e.detail;
+		openModal = e.detail;
 		document.getElementsByTagName('BODY')[0].classList.remove('overflow-hidden');
 		document.getElementsByTagName('BODY')[0].classList.add('overflow-auto');
 	}
@@ -31,14 +23,14 @@
 		signupModalOn = e.detail;
 	}
 
-	let loggedIn = false;
-	async function handleLog() {
-		loggedIn = !loggedIn;
-	}
+	import { page } from '$app/stores';
+	import type { PageData } from '../routes/$types';
+	export let data: PageData;
+	$: supabase = data.supabase;
 </script>
 
 <div
-	class="{open
+	class="{openModal
 		? 'hidden'
 		: 'fixed'} top-0 flex w-full flex-row content-center bg-transparent p-2 backdrop-blur-xl transition-colors dark:border-slate-50/[0.06]"
 >
@@ -49,33 +41,35 @@
 		</div>
 	</div>
 	<div class="grow" />
-	{#if !loggedIn}
+	{#if !$page.data.session}
 		<button
 			class="duration-800 header-btn"
 			on:click={() => {
-				open = true;
+				openModal = true;
 				document.getElementsByTagName('BODY')[0].classList.add('overflow-hidden');
 			}}>Login</button
 		>
 	{:else}
-		<button class="duration-800 header-btn" on:click={handleLog}>Logout</button>
+		<button
+			class="duration-800 header-btn"
+			on:click={async () => {
+				const { error } = await supabase.auth.signOut();
+				if (error) {
+					console.log(error);
+				}
+			}}>Logout</button
+		>
+		<button class="duration-800 header-btn" on:click={handleAddNew}>Add</button>
+		<button class="duration-800 header-btn">Save</button>
+		<DarkModeButton />
 	{/if}
-	<button class="duration-800 header-btn" on:click={handleAddNew}>Add</button>
-	<button class="duration-800 header-btn">Save</button>
-	<button class="duration-800 header-btn w-12 " on:click={handleSwitchDarkMode}
-		>{#if darkMode}
-			<Svg name="sun" class="m-3 h-5 w-5 fill-none stroke-white stroke-2" />
-		{:else}
-			<Svg name="moon" class="fill-solid m-3 h-5 w-5 stroke-current stroke-2" />
-		{/if}</button
-	>
 </div>
 <div class="invisible h-[104px] bg-cyan-300 sm:h-[72px]" />
 
-{#if open}
+{#if openModal}
 	{#if !signupModalOn}
-		<LoginModal on:closeModel={closeModal} on:switchSignup={switchSignup} />
+		<LoginModal on:closeModel={closeModal} on:switchSignup={switchSignup} d={data} />
 	{:else}
-		<SignupModal on:closeModel={closeModal} on:switchSignup={switchSignup} />
+		<SignupModal on:closeModel={closeModal} on:switchSignup={switchSignup} d={data} />
 	{/if}
 {/if}

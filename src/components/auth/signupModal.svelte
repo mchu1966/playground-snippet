@@ -9,6 +9,19 @@
 	function switchSignup() {
 		dispatchSwitchSignup('switchSignup', false);
 	}
+
+	import type { PageData } from '../../routes/$types';
+	export let d: PageData;
+	$: supabase = d.supabase;
+
+	async function signUp(e: SubmitEvent) {
+		const formData = new FormData(e.target as HTMLFormElement);
+		const { data, error } = await supabase.auth.signUp({
+			email: formData.get('email') as string,
+			password: formData.get('password') as string
+		});
+		console.log(data, error);
+	}
 </script>
 
 <div>
@@ -26,7 +39,7 @@
 					<h1 class="text-xl font-semibold dark:text-white">
 						Welcome back, <span class="font-normal">sign in to continue</span>
 					</h1>
-					<form class="mt-6">
+					<form class="mt-6" on:submit|preventDefault={signUp}>
 						<label for="email" class="block text-xs font-semibold uppercase text-gray-600"
 							>E-mail</label
 						>
@@ -54,19 +67,23 @@
 						<div class="grid gap-4">
 							<button
 								type="submit"
-								class="mt-6 w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
+								class="mt-6 mb-4 w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
 							>
 								Sign up
 							</button>
-							<div class="h-px w-full bg-black dark:bg-white" />
-							<!-- oauth buttons here -->
-							<button
-								on:click={switchSignup}
-								class="w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
-							>
-								Already have account? Login here
-							</button>
 						</div>
+
+						<div class="mb-4 flex flex-row">
+							<div class="h-px w-full self-center bg-black dark:bg-white" />
+							<div class="px-2">or</div>
+							<div class="h-px w-full self-center bg-black dark:bg-white" />
+						</div>
+						<button
+							on:click={switchSignup}
+							class="w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none hover:shadow-white/70 focus:outline-none dark:border dark:shadow-inner"
+						>
+							Already have account? Login here
+						</button>
 					</form>
 				</div>
 			</div>
